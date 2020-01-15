@@ -14,11 +14,12 @@ function App() {
         avatar: '',
         follower: []
     }
-}
+  }
   componentDidMount() {
     axios
     // fetch your data 
     .get("https://api.github.com/users/Bleuxgenius")
+    // then set the state 
     .then(res => {
         this.setState({
             name: res.data.name,
@@ -28,36 +29,53 @@ function App() {
         });
         console.log(res);
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
 
     axios
-    .get("https://api.github.com/users/Bleuxgenius")
+    .get("https://api.github.com/users/Bleuxgenius/followers")
     .then(res => {
-      console.log(`follower )
+      console.log(`follower ${res.data}`)
+
+      this.setState({
+        follower: res.data
+      })
     })
   }
 
-
-
-
+render() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <h1> Git Hub User Cards</h1>
+      console.log{(this.state)}
+
+
+        <div className="center"> 
+        <UserCard
+        name={this.state.name}
+        login={this.state.login}
+        email={this.state.email}
+        avatar={this.state.avatar}
+        />
+        </div>
+
+          <h3> followers</h3>
+          <div className="followerdiv">
+            {this.state.follower.map(e => {
+              return (
+                <UserCard
+                name={e.name}
+                login={e.login}
+                email={e.html_url}
+                avatar={e.avatar_url}
+                />
+              )
+            })}
+
+          </div>
+          </div>
+  
+  )
+          }
 }
 
 export default App;
